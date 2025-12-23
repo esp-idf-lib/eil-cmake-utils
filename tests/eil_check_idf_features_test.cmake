@@ -1,0 +1,33 @@
+include(${CMAKE_CURRENT_LIST_DIR}/test_helper.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/../cmake/eil_check_idf_features.cmake)
+
+set(IDF_VERSION "foo bar")
+
+describe("HAS_ESP_DRIVERS")
+    when("version is 5.2")
+        set(IDF_VERSION_MAJOR 5)
+        set(IDF_VERSION_MINOR 2)
+        it("is FALSE")
+        eil_check_idf_features()
+        expect(TO_BE FALSE)
+
+    when("version is 5.3")
+        set(IDF_VERSION_MAJOR 5)
+        set(IDF_VERSION_MINOR 3)
+        it("is TRUE")
+        eil_check_idf_features()
+        expect(TO_BE TRUE)
+
+    when("version is 5.4")
+        set(IDF_VERSION_MAJOR 5)
+        set(IDF_VERSION_MINOR 4)
+        it("is TRUE")
+        eil_check_idf_features()
+        expect(TO_BE TRUE)
+
+    when("version is 6.0")
+        set(IDF_VERSION_MAJOR 6)
+        set(IDF_VERSION_MINOR 0)
+        it("is TRUE")
+        eil_check_idf_features()
+        expect(TO_BE TRUE)
