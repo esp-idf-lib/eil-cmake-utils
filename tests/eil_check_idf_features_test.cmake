@@ -3,7 +3,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/../cmake/eil_check_idf_features.cmake)
 
 set(IDF_VERSION "foo bar")
 
-describe("HAS_ESP_DRIVERS")
+describe("IDF_HAS_ESP_DRIVERS")
     when("version is 5.2")
         set(IDF_VERSION_MAJOR 5)
         set(IDF_VERSION_MINOR 2)
