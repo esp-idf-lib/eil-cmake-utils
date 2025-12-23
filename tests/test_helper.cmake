@@ -1,3 +1,7 @@
+macro(require file)
+    include("${CMAKE_CURRENT_LIST_DIR}/../cmake/${file}.cmake")
+    set(FILE_UNDER_TEST ${file})
+endmacro()
 
 macro(describe subject)
     message(STATUS "Describe: ${subject}")
@@ -14,6 +18,8 @@ macro(it behavior)
 endmacro()
 
 function(expect condition value)
+    cmake_language(CALL ${FILE_UNDER_TEST})
+
     if(${condition} STREQUAL "TO_BE")
         if(NOT "${${SUBJECT}}" STREQUAL "${value}")
             message(FATAL_ERROR "  FAILED: ${CONTEXT} ${SUBJECT} ${CURRENT_BEHAVIOR}\n    Expected ${SUBJECT} to be [${value}], but got [${${variable}}]")
