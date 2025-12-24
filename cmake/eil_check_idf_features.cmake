@@ -12,10 +12,6 @@ endif()
 #       explicitly call only the specific checks your project requires.
 macro(eil_check_idf_features)
     message(DEBUG "eil_check_idf_features")
-    message(DEBUG "Running IDF feature checks for version ${IDF_VERSION}")
-    if(NOT DEFINED IDF_VERSION)
-        message(FATAL_ERROR "IDF_VERSION is not defined. Are you running this inside an ESP-IDF environment?")
-    endif()
 
     # Definition of features. implement eil_check_idf_* below
     set(features has_esp_drivers)
@@ -29,7 +25,7 @@ macro(eil_check_idf_features)
     endforeach()
 endmacro()
 
-# @brief Checks if the esp-idf version supports `esp_driver_*` components. Exports a boolean variable,`IDF_HAS_ESP_DRIVERS`.
+# @brief Checks if the esp-idf version supports `esp_driver_*` components. Exports a boolean variable,`EIL_IDF_HAS_ESP_DRIVERS`.
 #
 # Before version 5.3, the conponent for peripherials was a monolithic `driver`.
 # Since version 5.3, each driver, such as `gpio` has its own component, i.e.,
@@ -42,16 +38,26 @@ endmacro()
 # When a source includes `driver/gpio.h":
 #
 # ```cmake
+# include(eil_check_idf_features)
 # eil_check_idf_has_esp_drivers()
 #
-# if(${IDF_HAS_ESP_DRIVERS)
-#     set(REQUIRED_COMPONENTS esp_driver_gpio freertos log esp_timer)
+# # List of common ESP-IDF components required by this component
+# set(REQUIRED_COMPONENTS freertos esp_idf_lib_helpers)
+#
+# if(EIL_IDF_HAS_ESP_DRIVERS)
+#     list(APPEND REQUIRED_COMPONENTS esp_driver_gpio)
 # else()
-#     set(REQUIRED_COMPONENTS driver freertos log esp_timer)
+#     list(APPEND REQUIRED_COMPONENTS driver)
 # endif()
+#
+# idf_component_register(
+#     SRCS src.c
+#     INCLUDE_DIRS .
+#     REQUIRES ${REQUIRED_COMPONENTS}
+# )
 # ```
 #
-# @note When `IDF_HAS_ESP_DRIVERS` is true, add `esp_driver_*` to `REQUIRES` or
+# @note When `EIL_IDF_HAS_ESP_DRIVERS` is true, add `esp_driver_*` to `REQUIRES` or
 #       `PRIV_REQUIRES` when calling `idf_component_register()`.
 #       When false, add `driver` to REQUIRES or PRIV_REQUIRES.
 #
@@ -60,17 +66,20 @@ endmacro()
 #
 # @note `PRIV_REQUIRES` should be set to all components whose header files are
 #       `#included` from any source files in this component, unless already listed
-# in REQUIRES.
+#       in REQUIRES.
+#
+# @note Dependencies, such as REQUIRES, cannot be nodified after
+#       idf_component_register(). idf_component_set_property() cannot either.
 macro(eil_check_idf_has_esp_drivers)
     # Check for esp_driver_* support (ESP-IDF ≥ 5.3)
-    set(IDF_HAS_ESP_DRIVERS FALSE)
+    set(EIL_IDF_HAS_ESP_DRIVERS FALSE)
     if((IDF_VERSION_MAJOR GREATER_EQUAL 6) OR
        (IDF_VERSION_MAJOR EQUAL 5 AND IDF_VERSION_MINOR GREATER_EQUAL 3))
-        set(IDF_HAS_ESP_DRIVERS TRUE)
+        set(EIL_IDF_HAS_ESP_DRIVERS TRUE)
     endif()
 
     # CACHE store this entry in the cache file rather than keeping it as a
     #       local, temporary variable.
-    set(IDF_HAS_ESP_DRIVERS ${IDF_HAS_ESP_DRIVERS} CACHE INTERNAL "esp-idf supports esp_driver_ components")
-    message(DEBUG " - IDF_HAS_ESP_DRIVERS: ${IDF_HAS_ESP_DRIVERS}")
+    set(EIL_IDF_HAS_ESP_DRIVERS ${EIL_IDF_HAS_ESP_DRIVERS} INTERNAL "esp-idf supports esp_driver_ components")
+    message(DEBUG " - EIL_IDF_HAS_ESP_DRIVERS: ${EIL_IDF_HAS_ESP_DRIVERS}")
 endmacro()
