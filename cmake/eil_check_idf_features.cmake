@@ -14,13 +14,12 @@ macro(eil_check_idf_features)
     message(DEBUG "eil_check_idf_features")
 
     # Definition of features. implement eil_check_idf_* below
-    set(features has_esp_drivers)
+    set(features eil_check_idf_has_esp_drivers)
     foreach(feat ${features})
-        set(macro_name "eil_check_idf_${feat}")
-        if(COMMAND ${macro_name})
-            cmake_language(CALL ${macro_name})
+        if(COMMAND ${feat})
+            cmake_language(CALL ${feat})
         else()
-            message(FATAL, "BUG: Undefined call to ${macro_name}")
+            message(FATAL, "BUG: Undefined call to ${feat}")
         endif()
     endforeach()
 endmacro()
@@ -75,11 +74,11 @@ macro(eil_check_idf_has_esp_drivers)
     set(EIL_IDF_HAS_ESP_DRIVERS FALSE)
     if((IDF_VERSION_MAJOR GREATER_EQUAL 6) OR
        (IDF_VERSION_MAJOR EQUAL 5 AND IDF_VERSION_MINOR GREATER_EQUAL 3))
-        set(EIL_IDF_HAS_ESP_DRIVERS TRUE)
+       set(EIL_IDF_HAS_ESP_DRIVERS TRUE)
     endif()
 
     # CACHE store this entry in the cache file rather than keeping it as a
     #       local, temporary variable.
-    set(EIL_IDF_HAS_ESP_DRIVERS ${EIL_IDF_HAS_ESP_DRIVERS} INTERNAL "esp-idf supports esp_driver_ components")
+    set(EIL_IDF_HAS_ESP_DRIVERS "${EIL_IDF_HAS_ESP_DRIVERS}" CACHE INTERNAL "esp-idf supports esp_driver_ components")
     message(DEBUG " - EIL_IDF_HAS_ESP_DRIVERS: ${EIL_IDF_HAS_ESP_DRIVERS}")
 endmacro()
