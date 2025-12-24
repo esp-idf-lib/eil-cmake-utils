@@ -5,25 +5,12 @@ cross-target and cross-version library development for the ESP-IDF framework.
 
 <!-- vim-markdown-toc GFM -->
 
-* [Key Features:](#key-features)
 * [Usage](#usage)
 * [Testing](#testing)
 
 <!-- vim-markdown-toc -->
 
-## Key Features:
-
-- **Target-Specific Logic**: Conditionally implement features based on
-  hardware availability (e.g., fallback to custom pulse-counting logic when
-  the PCNT peripheral is unavailable).
-- **Version-Aware Dependencies**: Automatically resolve component dependencies
-  based on the `esp-idf` version in use:
-  - Modern versions: Requires `esp_driver_gpio`
-  - Legacy versions: Falls back to the `driver` component
-- **Multi-Target Support**: Streamlines building libraries compatible with
-  diverse ESP32/ESP8266 variants and ESP-IDF releases.
-
-> *Note*: Reduces boilerplate for conditional compilation and dependency management in ESP-IDF projects.
+---
 
 ## Usage
 
@@ -47,7 +34,6 @@ idf_component_register(SRCS "main.c"
 # The cmake files are already available to include. Include one to use in your
 # project.
 include(eil_check_idf_features)
-include(eil_check_chip_features)
 
 if(IDF_HAS_ESP_DRIVERS)
     # do something
