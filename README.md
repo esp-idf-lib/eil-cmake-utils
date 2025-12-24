@@ -53,10 +53,16 @@ cmake -P tests/runner.cmake
 ```
 
 To run a test:
+
 ```console
 cmake -P tests/foo_test.cmake
 ```
 
+With verbose log:
+
+```console
+cmake -P tests/foo_test.cmake --log-level=DEBUG
+```
 To run integration test
 
 ``console
