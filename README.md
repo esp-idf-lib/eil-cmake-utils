@@ -46,7 +46,7 @@ The project uses a custom test runner implemented in `tests/runner.cmake`.
 This script automatically discovers and executes all tests located in the
 `tests/` directory.
 
-To run all tests:
+To run all unit tests:
 
 ```console
 cmake -P tests/runner.cmake
@@ -55,4 +55,10 @@ cmake -P tests/runner.cmake
 To run a test:
 ```console
 cmake -P tests/foo_test.cmake
+```
+
+To run integration test
+
+``console
+idf.py all -C examples/default
 ```
