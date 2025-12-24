@@ -14,30 +14,30 @@ cross-target and cross-version library development for the ESP-IDF framework.
 
 ## Usage
 
-```yaml
----
-# main/idf_component.yml
-version: 1.0.0
-description: default
-dependencies:
-  esp-idf-lib/eil-cmake-utils:
-    version: "*"
-  idf:
-    version: ">=5.2.0"
-```
+When a source code requires `driver/gpio.h` and not all `esp-idf` versions do
+not have `esp_driver_gpio`:
 
 ```cmake
-# main/CMakeLists.txt
-idf_component_register(SRCS "main.c"
-                    INCLUDE_DIRS ".")
+# CMakeList.txt in component directory
 
-# The cmake files are already available to include. Include one to use in your
-# project.
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/common/cmake)
 include(eil_check_idf_features)
+eil_check_idf_has_esp_drivers()
 
-if(IDF_HAS_ESP_DRIVERS)
-    # do something
+# List of common ESP-IDF components required by this component
+set(REQUIRED_COMPONENTS freertos esp_idf_lib_helpers)
+
+if(EIL_IDF_HAS_ESP_DRIVERS)
+    list(APPEND REQUIRED_COMPONENTS esp_driver_gpio)
+else()
+    list(APPEND REQUIRED_COMPONENTS driver)
 endif()
+
+idf_component_register(
+    SRCS onewire.c
+    INCLUDE_DIRS .
+    REQUIRES ${REQUIRED_COMPONENTS}
+)
 ```
 
 ## Testing
