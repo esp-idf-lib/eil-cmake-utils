@@ -63,8 +63,3 @@ With verbose log:
 ```console
 cmake -P tests/foo_test.cmake --log-level=DEBUG
 ```
-To run integration test
-
-``console
-idf.py all -C examples/default
-```
