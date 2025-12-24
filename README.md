@@ -50,6 +50,16 @@ To run all unit tests:
 
 ```console
 cmake -P tests/runner.cmake
+-- Running: /home/trombik/github/trombik/esp-idf-lib/eil-cmake-utils/tests/eil_check_idf_features_test.cmake
+-- Describe: EIL_IDF_HAS_ESP_DRIVERS
+-- when version is 5.2
+--   PASSED: when version is 5.2 EIL_IDF_HAS_ESP_DRIVERS is FALSE
+-- when version is 5.3
+--   PASSED: when version is 5.3 EIL_IDF_HAS_ESP_DRIVERS is TRUE
+-- when version is 5.4
+--   PASSED: when version is 5.4 EIL_IDF_HAS_ESP_DRIVERS is TRUE
+-- when version is 6.0
+--   PASSED: when version is 6.0 EIL_IDF_HAS_ESP_DRIVERS is TRUE
 ```
 
 To run a test:
